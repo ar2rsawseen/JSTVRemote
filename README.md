@@ -11,6 +11,9 @@ Current TVs supported are:
 <li>LG with NetCast</li>
 </ul>
 
+<h2>Official page</h2>
+<a href='http://webcodingeasy.com/JS-classes/Control-Smart-TV-from-browser' target="_blank">WebCodingEas.com - Control Smart TV from browser</a>
+
 <h2>Usage</h2>
 
 <h3>Initialization</h3>
