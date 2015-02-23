@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+/*************************************************************
+ * This script is developed by Arturs Sosins aka ar2rsawseen, http://webcodingeasy.com
+ * Feel free to distribute and modify code, but keep reference to its creator
+ *
+ * This library allows you to develop web apps to control your Smart TVs. 
+ * Support of features depends on your TV, but it can send remote control keys 
+ * to your TV, input text or control mouse cursor. Current TVs supported are:
+ * Philips with JointSpace APIs, LG with WebOS, LG with NetCast
+ *
+ * For more information, examples and online documentation visit: 
+ * http://webcodingeasy.com/JS-classes/Control-Smart-TV-from-browser
+**************************************************************/
+-->
+<html>
+<head>
+</head>
+<body>
+<script src="JSTVRemote.js"></script>
+<p>TV: <select id="tv">
+	<option value="philips">Philips</option>
+	<option value="lg_webos">LG (WebOS)</option>
+	<option value="lg_netcast">LG (NetCast)</option>
+</select> IP: <input type="text" id="ip" value="192.168.1.100"/> <button onclick="setTv()">Set</button></p>
+<p>Select key: <select id="keys"></select> <button onclick="sendKey()">Send</button></p>
+<p>Send Text: <input type="text" id="text"/> <button onclick="sendText()">Send</button></p>
+<script>
+var tv;
+var keys;
+var keySelect = document.getElementById("keys");
+var tvSelect = document.getElementById("tv");
+var textInput = document.getElementById("text");
+var features = {};
+
+function setTv(){
+	var ip = document.getElementById("ip").value;
+	var tvType = tvSelect.options[tvSelect.selectedIndex].value;
+	tv = JSTVRemote.init(tvType, ip, null, function(data){
+		alert(tvType + " initiated");
+		if(data)
+			alert(data);
+	});
+	features = tv.getFeatures();
+	keys = tv.getKeys();
+	keySelect.innerHTML = "";
+	for(var i = 0; i < keys.length; i++){
+		var option = document.createElement('option');
+		option.value = keys[i];
+		option.text = keys[i];
+		keySelect.appendChild(option);
+	}
+}
+
+function sendKey(){
+	if(tv){
+		if(features["sendKey"]){
+			var key = keySelect.options[keySelect.selectedIndex].value;
+			tv.sendKey(key, function(response){
+				alert("Sent key: "+key + "; "+ response);
+			});
+		}
+	}
+	else{
+		alert("Set TV first")
+	}
+}
+
+function sendText(){
+	if(tv){
+		if(features["inputText"]){
+			var text = textInput.value;
+			tv.inputText(text, function(response){
+				alert("Sent key: "+key + "; "+ response);
+			});
+		}
+	}
+	else{
+		alert("Set TV first")
+	}
+}
+</script>
+</body>
+</html>
